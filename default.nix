@@ -5,6 +5,7 @@
     import "${builtins.fetchTree flakeLock.nodes.nixpkgs.locked}" { }
   )
 , lib ? pkgs.lib
+, nixPackage ? pkgs.nix
 }:
 
 let
@@ -50,7 +51,7 @@ let
     };
 
   buildNixTarball = (
-    { nix ? pkgs.nix
+    { nix ? nixPackage
     , cacert ? pkgs.cacert
     , drvs ? [ ]
     , channel ? channel'
@@ -133,7 +134,7 @@ let
 
   buildLegacyPkg = lib.makeOverridable (
     { type
-    , nix ? pkgs.nix
+    , nix ? nixPackage
     , tarball ? buildNixTarball { inherit channel nix; }
     , pname ? "nix-multi-user"
     , ext ? {
